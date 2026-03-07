@@ -1,5 +1,7 @@
 # lowk im not sharing this so so get it urself from discord.com/developers
-BOT_TOKEN = "MTQ3NDg0MjQ5MTQ2MjIyMTg2NQ.GuJoNK.1Xdqf3NvaRNlvuV2y_ZmyNSk6X1t5-H8Yqiay4" 
+import os
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 GLUP_EMOJI = "<:glup:1470514577262510132>"
 
