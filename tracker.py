@@ -10,13 +10,14 @@ def checkMessage(message):
         for i in range(count):
             database.add_count("glup_emoji")
         detected.append("glup_emoji")
+    # --- GIF ---
+    # sprawdza czy ktoś wysłał plik o nazwie glup.gif
+    for attachment in message.attachments:
+        if attachment.filename.lower() == "glup.gif":
+            database.add_count("glup_gif")
+            detected.append("glup_gif")
 
-    # gif check
-    if config.GLUP_GIF in message.content:
-        database.add_count("glup_gif")
-        detected.append("glup_gif")
-    
-    # sticker check
+        # sticker check
     for sticker in message.stickers:
         if sticker.id == config.GLUP_STICKER:
             database.add_count("glup_sticker")
