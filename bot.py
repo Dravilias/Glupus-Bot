@@ -24,31 +24,58 @@ async def on_message(message):
     # ignoring bot messages
     if message.author.bot:
         return
-    
+    # makes tracker check the contents
     tracker.checkMessage(message)
-
+    # some bullshit that breaks it
     await bot.process_commands(message)
 
-# command handling
+# !glups command
 @bot.command(name="glups")
-async def stats(ctx):
-    rows = database.get_all_counts()
-
+async def glups(ctx):
+    # gets the rows for glup related stuff
+    rows = database.get_counts(["glup_emoji", "glup_gif", "glup_sticker"])
+    # does some bullshit i guess
+    counts = dict(rows)
+    # bullshit for embeds
     embed = discord.Embed(
-        title=f"{config.GLUP_EMOJI} Glups",
+        title=f"{config.GLUP_EMOJI} Glup Stats",
         color=discord.Color.blurple()
     )
+    embed.add_field(name="Emotka", value=f"**{counts.get('glup_emoji', 0)}** times", inline=False)
+    embed.add_field(name="GIF", value=f"**{counts.get('glup_gif', 0)}** times", inline=False)
+    embed.add_field(name="Sticker", value=f"**{counts.get('glup_sticker', 0)}** times", inline=False)
 
-    for item, count in rows:
-        embed.add_field(
-            name=item.replace("_", " ").title(),
-            value=f"**{count}** time",
-            inline=False
+    await ctx.send(embed=embed)
+
+# !steamhappy
+
+@bot.command(name="steamhappy")
+async def steamhappy(ctx):
+    # gets counts for steamhappy
+    rows = database.get_counts(["steamhappy_emoji", "steamhappy_gif"])
+    # does some bs
+    counts = dict(rows)
+    # bullshit for embed
+    embed = discord.Embed(
+        title=f"{config.STEAMHAPPY_EMOJI} Steam Happy Stats",
+        color=discord.Color.blurple()
     )
-        
-    await ctx.send(embed=embed) 
+    embed.add_field(name="Emotka", value=f"**{counts.get('steamhappy_emoji', 0)}** times", inline=False)
+    embed.add_field(name="GIF", value=f"**{counts.get('steamhappy_gif', 0)}** times", inline=False)
 
-print("odpalam bota...")
+    await ctx.send(embed=embed)
+
+# !reset (admin only)
+
+@commands.has_permissions(administrator=True)
+@bot.command(name="reset")
+async def reset(ctx):
+    database.reset_counts()
+    await ctx.send("✅ Liczniki zresetowane!")
+
+print("lauching bot")
+
+
 try:
     bot.run(config.BOT_TOKEN)
 except Exception as e:
