@@ -41,7 +41,7 @@ async def glups(ctx):
         title=f"{config.GLUP_EMOJI} Glup Stats",
         color=discord.Color.blurple()
     )
-    embed.add_field(name="Emotka", value=f"**{counts.get('glup_emoji', 0)}** times", inline=False)
+    embed.add_field(name="Emote", value=f"**{counts.get('glup_emoji', 0)}** times", inline=False)
     embed.add_field(name="GIF", value=f"**{counts.get('glup_gif', 0)}** times", inline=False)
     embed.add_field(name="Sticker", value=f"**{counts.get('glup_sticker', 0)}** times", inline=False)
 
@@ -60,7 +60,7 @@ async def steamhappy(ctx):
         title=f"{config.STEAMHAPPY_EMOJI} Steam Happy Stats",
         color=discord.Color.blurple()
     )
-    embed.add_field(name="Emotka", value=f"**{counts.get('steamhappy_emoji', 0)}** times", inline=False)
+    embed.add_field(name="Emote", value=f"**{counts.get('steamhappy_emoji', 0)}** times", inline=False)
     embed.add_field(name="GIF", value=f"**{counts.get('steamhappy_gif', 0)}** times", inline=False)
 
     await ctx.send(embed=embed)

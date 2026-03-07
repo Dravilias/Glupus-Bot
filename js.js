@@ -1,1 +1,0 @@
-let nr1 = Math.floor()
