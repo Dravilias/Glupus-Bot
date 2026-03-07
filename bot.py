@@ -41,9 +41,9 @@ async def stats(ctx):
 
     for item, count in rows:
         embed.add_field(
-        name=item.replace("_", " ").title(),
-        value=f"**{count}** razy",
-        inline=False
+            name=item.replace("_", " ").title(),
+            value=f"**{count}** razy",
+            inline=False
     )
         
     await ctx.send(embed=embed) 
