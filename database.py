@@ -1,55 +1,67 @@
-import sqlite3
-# creates or opens usage.db file where everything is stored
-conn = sqlite3.connect("usage.db")
-# this is some bullshit to make the table actually usable
+import psycopg2
+import os
+
+# connects with PostgreSQL by URL fron Railway Variables
+# DATABASE_URL is auto set by railway
+conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+conn.autocommit = True  # auto commits
 cursor = conn.cursor()
-# checks if the table exists if not creates it
+
+
 def setup():
+    # if table doesnt exist it creats it
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS usage (
             item  TEXT PRIMARY KEY,
-            count INTEGER DEFAULT 0
+            count INTEGER DEFAULT 0,
+            total INTEGER DEFAULT 0
         )
     """)
 
-    # loop for inserting shit in
+    # adds rows with count 1
     for item in [
-        #glups
+        # glup
         "glup_emoji", "glup_gif", "glup_sticker",
-        #steamhappy
+        # steamhappy
         "steamhappy_emoji", "steamhappy_gif"
-        ]:
+    ]:
         cursor.execute(
-        "INSERT OR IGNORE INTO usage (item, count) VALUES (?, 0)",
-        (item,)
-    )
-    conn.commit()
+            "INSERT INTO usage (item, count, total) VALUES (%s, 0, 0) ON CONFLICT (item) DO NOTHING",
+            (item,)
+        )
 
-# function for adding counts into the db
+
 def add_count(item):
-    
+    # adds one to count of said thing
     cursor.execute(
-        "UPDATE usage SET count = count + 1 WHERE item = ?",
+        "UPDATE usage SET count = count + 1, total = total + 1 WHERE item = %s",
         (item,)
     )
-    conn.commit()
+
 
 def get_counts(items):
-    # pobiera liczniki tylko dla podanej listy rzeczy
-    placeholders = ",".join("?" * len(items))
+    # gets counts only for said items
+    placeholders = ",".join(["%s"] * len(items))
     cursor.execute(
-        f"SELECT item, count FROM usage WHERE item IN ({placeholders})",
+        f"SELECT item, count, total FROM usage WHERE item IN ({placeholders})",
         items
     )
     return cursor.fetchall()
 
+def reset_monthly(items):
+    # resets monthly count
+    placeholders = ",".join(["%s"] * len(items))
+    cursor.execute(
+        f"UPDATE usage SET count = 0 WHERE item IN ({placeholders})",
+        items
+    )
 
-# funtion for fetching counts all counts from the db
 def get_all_counts():
-    cursor.execute("SELECT item, count FROM usage")
-    return cursor.fetchall() 
+    # gets all counts
+    cursor.execute("SELECT item, count, total FROM usage")
+    return cursor.fetchall()
 
-# resets the counts admin only
+
 def reset_counts():
+    # resets counts
     cursor.execute("UPDATE usage SET count = 0")
-    conn.commit()
