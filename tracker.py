@@ -12,8 +12,7 @@ def checkMessage(message):
         detected.append("glup_emoji")
     # --- GIF ---
     # sprawdza czy ktoś wysłał plik o nazwie glup.gif
-    for attachment in message.attachments:
-        if attachment.filename.lower() == "glup.gif":
+    if "glup.gif" in message.content:
             database.add_count("glup_gif")
             detected.append("glup_gif")
 
