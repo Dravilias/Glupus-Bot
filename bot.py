@@ -47,3 +47,10 @@ async def stats(ctx):
     )
         
     await ctx.send(embed=embed) 
+
+print("odpalam bota...")
+try:
+    bot.run(config.BOT_TOKEN)
+except Exception as e:
+    print(f"BŁĄD: {e}")
+    input()
