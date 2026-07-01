@@ -13,7 +13,7 @@ def checkMessage(message):
         detected.append("glup_emoji")
     
     # glup gif
-    if "glup.gif" in message.content:
+    if config.GLUP_GIF in message.content:
             database.add_count("glup_gif")
             detected.append("glup_gif")
 
@@ -23,7 +23,7 @@ def checkMessage(message):
             database.add_count("glup_sticker")
             detected.append("glup_sticker")
 
-    # steamhappy emoji
+    # steamhappy emojig
     count = message.content.count(config.STEAMHAPPY_EMOJI)
     if count > 0:
         for i in range(count):
@@ -31,7 +31,7 @@ def checkMessage(message):
         detected.append("steamhappy_emoji")
 
     # steamhappy gif 
-    if "tenor.com" in message.content and config.STEAMHAPPY_GIF in message.content:
+    if "klipy.com" in message.content and config.STEAMHAPPY_GIF in message.content:
         database.add_count("steamhappy_gif")
         detected.append("steamhappy_gif")          
 
